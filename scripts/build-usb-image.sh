@@ -166,11 +166,15 @@ prepare_workspace() {
 extract_source() {
   if [[ -n "$SOURCE_TREE" ]]; then
     cp -a "$SOURCE_TREE/." "$ISO_ROOT/"
+    # ISO trees often carry read-only file modes; make working copy writable.
+    chmod -R u+w "$ISO_ROOT"
     return
   fi
 
   require_command xorriso
   xorriso -osirrox on -indev "$SOURCE_ISO" -extract / "$ISO_ROOT" >/dev/null
+  # xorriso extraction preserves read-only modes from the ISO filesystem.
+  chmod -R u+w "$ISO_ROOT"
 }
 
 render_preseed() {
