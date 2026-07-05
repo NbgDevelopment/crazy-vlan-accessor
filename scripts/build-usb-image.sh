@@ -174,7 +174,8 @@ extract_source() {
 }
 
 render_preseed() {
-  python - "$REPO_ROOT/preseed/preseed.cfg" "$ISO_ROOT/preseed/preseed.cfg" "$HOSTNAME_VALUE" "$ADMIN_USER" "$ADMIN_PASSWORD_HASH" <<'PY'
+  require_command python3
+  python3 - "$REPO_ROOT/preseed/preseed.cfg" "$ISO_ROOT/preseed/preseed.cfg" "$HOSTNAME_VALUE" "$ADMIN_USER" "$ADMIN_PASSWORD_HASH" <<'PY'
 from pathlib import Path
 import sys
 
