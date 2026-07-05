@@ -35,7 +35,7 @@ Example:
 
 ## Bootstrap script
 
-Use `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/scripts/setup-host.sh` to:
+Use `scripts/setup-host.sh` to:
 
 - install the minimal required Debian packages
 - enable 802.1Q VLAN support
@@ -47,7 +47,7 @@ Use `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/scripts/setup-hos
 ### Example
 
 ```bash
-sudo /home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/scripts/setup-host.sh \
+sudo ./scripts/setup-host.sh \
   --interface eno1 \
   --hostname crazy-vlan-accessor \
   --admin-vlan 10 \
