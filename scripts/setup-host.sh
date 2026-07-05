@@ -278,6 +278,7 @@ if [[ "$ROOT_DIR" == "/" ]]; then
   run systemctl restart systemd-resolved systemd-networkd
 
   if ((CREATE_DOCKER_NETWORKS)); then
+    run systemctl start docker
     run /usr/local/sbin/create-docker-vlans.sh
   fi
 fi
