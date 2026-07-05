@@ -12,7 +12,7 @@ Minimal Debian-based host setup for running Docker containers on multiple VLANs 
 
 ## Recommended baseline
 
-This repository starts with a Debian 12 minimal implementation because it is:
+This repository targets a Debian 13 minimal installation because it is:
 
 - small and stable
 - available on x86_64 and ARM
@@ -78,7 +78,7 @@ This repository also provides Debian preseed assets and a USB image builder for 
 
 ### What the unattended installer does
 
-- installs Debian 12 with standard utilities and OpenSSH server
+- installs Debian 13 with standard utilities and OpenSSH server
 - creates a local administrative user defined at image build time
 - copies `setup-host.sh`, `config.env`, and `first-boot.service` onto the target system
 - enables the first-boot service so host configuration can be automated later if desired
@@ -93,7 +93,7 @@ Edit `preseed/config.env` before building the USB image.
 
 ### Build the customized installer image
 
-1. Download a Debian 12 netinstall ISO.
+1. Download a Debian 13 netinstall ISO.
 2. Generate a password hash:
 
    ```bash
@@ -105,7 +105,7 @@ Edit `preseed/config.env` before building the USB image.
    ```bash
    cd /path/to/crazy-vlan-accessor
    ./scripts/build-usb-image.sh \
-     --source-iso /path/to/debian-12-netinst.iso \
+     --source-iso /path/to/debian-13-netinst.iso \
      --output-iso /tmp/crazy-vlan-accessor-installer.iso \
      --admin-user vlanadmin \
      --admin-password-hash '$6$example$replace-this-with-a-real-hash'
