@@ -202,7 +202,8 @@ patch_isolinux() {
   local file="$ISO_ROOT/isolinux/txt.cfg"
   [[ -f "$file" ]] || return 0
 
-  python - "$file" <<'PY'
+  require_command python3
+  python3 - "$file" <<'PY'
 from pathlib import Path
 import sys
 
