@@ -226,7 +226,8 @@ patch_grub() {
   local file="$ISO_ROOT/boot/grub/grub.cfg"
   [[ -f "$file" ]] || return 0
 
-  python - "$file" <<'PY'
+  require_command python3
+  python3 - "$file" <<'PY'
 from pathlib import Path
 import sys
 
