@@ -116,7 +116,8 @@ fi
 
 for required in ADMIN_USER ADMIN_PASSWORD_HASH; do
   if [[ -z "${!required}" ]]; then
-    echo "Missing required argument: ${required}" >&2
+    flag="--$(printf '%s' "$required" | tr '[:upper:]' '[:lower:]' | tr _ -)"
+    echo "Missing required argument: ${flag}" >&2
     usage >&2
     exit 1
   fi
