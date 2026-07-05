@@ -1,0 +1,14 @@
+[Unit]
+Description=Crazy VLAN Accessor first boot configuration
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/usr/local/etc/crazy-vlan-accessor/config.env
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/crazy-vlan-accessor/first-boot.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
