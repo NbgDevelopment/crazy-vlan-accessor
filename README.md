@@ -35,7 +35,7 @@ Example:
 
 ## Manual host bootstrap
 
-Use `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/scripts/setup-host.sh` after installing Debian manually to:
+Use `scripts/setup-host.sh` after installing Debian manually to:
 
 - install the minimal required Debian packages
 - enable 802.1Q VLAN support
@@ -47,7 +47,7 @@ Use `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/scripts/setup-hos
 ### Example
 
 ```bash
-cd /home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor
+cd /path/to/crazy-vlan-accessor
 sudo ./scripts/setup-host.sh \
   --interface eno1 \
   --hostname crazy-vlan-accessor \
@@ -70,10 +70,11 @@ This repository also provides Debian preseed assets and a USB image builder for 
 
 ### Included files
 
-- `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/preseed.cfg` — unattended Debian installer template
-- `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/first-boot.service` — optional first-boot automation unit
-- `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/config.env` — site-specific VLAN and addressing configuration
-- `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/scripts/build-usb-image.sh` — ISO customization helper
+- `preseed/preseed.cfg` — unattended Debian installer template
+- `preseed/first-boot.service` — optional first-boot automation unit
+- `preseed/first-boot.sh` — first-boot wrapper invoked by the systemd unit
+- `preseed/config.env` — site-specific VLAN and addressing configuration
+- `scripts/build-usb-image.sh` — ISO customization helper
 
 ### What the unattended installer does
 
@@ -84,7 +85,7 @@ This repository also provides Debian preseed assets and a USB image builder for 
 
 ### Configure first-boot behavior
 
-Edit `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/config.env` before building the USB image.
+Edit `preseed/config.env` before building the USB image.
 
 - set `AUTO_RUN=0` to install only the OS and run the host bootstrap manually later
 - set `AUTO_RUN=1` to run the host bootstrap automatically on the first boot
@@ -102,7 +103,7 @@ Edit `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/config.e
 3. Build the custom ISO:
 
    ```bash
-   cd /home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor
+   cd /path/to/crazy-vlan-accessor
    ./scripts/build-usb-image.sh \
      --source-iso /path/to/debian-12-netinst.iso \
      --output-iso /tmp/crazy-vlan-accessor-installer.iso \

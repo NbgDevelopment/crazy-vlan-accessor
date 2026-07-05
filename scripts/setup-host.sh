@@ -100,7 +100,8 @@ done
 
 for required in INTERFACE ADMIN_VLAN ADMIN_CIDR ADMIN_GATEWAY ADMIN_DNS CONTAINER_VLANS; do
   if [[ -z "${!required}" ]]; then
-    echo "Missing required argument: ${required}" >&2
+    flag="--$(printf '%s' "$required" | tr "[:upper:]" "[:lower:]" | tr _ -)"
+    echo "Missing required argument: ${flag}" >&2
     usage >&2
     exit 1
   fi

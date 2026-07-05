@@ -105,7 +105,7 @@ while (($# > 0)); do
 done
 
 if [[ -n "$SOURCE_ISO" && -n "$SOURCE_TREE" ]]; then
-  echo "Use either --source-iso or --source-tree, not both." >&2
+  echo "Use either --source-iso or --source-tree, not both. --source-iso extracts files from a Debian ISO, while --source-tree uses an already extracted ISO directory." >&2
   exit 1
 fi
 
@@ -190,9 +190,10 @@ PY
 copy_payloads() {
   mkdir -p "$ISO_ROOT/preseed" "$ISO_ROOT/crazy-vlan-accessor"
   cp "$REPO_ROOT/preseed/first-boot.service" "$ISO_ROOT/preseed/first-boot.service"
+  cp "$REPO_ROOT/preseed/first-boot.sh" "$ISO_ROOT/preseed/first-boot.sh"
   cp "$CONFIG_ENV" "$ISO_ROOT/preseed/config.env"
   cp "$REPO_ROOT/scripts/setup-host.sh" "$ISO_ROOT/crazy-vlan-accessor/setup-host.sh"
-  chmod 755 "$ISO_ROOT/crazy-vlan-accessor/setup-host.sh"
+  chmod 755 "$ISO_ROOT/crazy-vlan-accessor/setup-host.sh" "$ISO_ROOT/preseed/first-boot.sh"
 }
 
 patch_isolinux() {
