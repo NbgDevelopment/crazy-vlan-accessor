@@ -106,7 +106,10 @@ for required in INTERFACE ADMIN_VLAN ADMIN_CIDR ADMIN_GATEWAY ADMIN_DNS CONTAINE
     exit 1
   fi
 done
-
+if [[ "$ROOT_DIR" == "/" && $DRY_RUN -eq 0 && $EUID -ne 0 ]]; then
+  echo "This script must be run as root (use sudo)." >&2
+  exit 1
+fi
 target_path() {
   local path="$1"
   if [[ "$ROOT_DIR" == "/" ]]; then
