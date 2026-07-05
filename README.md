@@ -33,9 +33,9 @@ Example:
 - VLAN `20` = containers for network A
 - VLAN `30` = containers for network B
 
-## Bootstrap script
+## Manual host bootstrap
 
-Use `scripts/setup-host.sh` to:
+Use `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/scripts/setup-host.sh` after installing Debian manually to:
 
 - install the minimal required Debian packages
 - enable 802.1Q VLAN support
@@ -47,6 +47,7 @@ Use `scripts/setup-host.sh` to:
 ### Example
 
 ```bash
+cd /home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor
 sudo ./scripts/setup-host.sh \
   --interface eno1 \
   --hostname crazy-vlan-accessor \
@@ -62,6 +63,66 @@ Then review and, when ready, create the Docker networks:
 ```bash
 sudo /usr/local/sbin/create-docker-vlans.sh
 ```
+
+## Unattended USB installer workflow
+
+This repository also provides Debian preseed assets and a USB image builder for creating a customized installer image.
+
+### Included files
+
+- `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/preseed.cfg` — unattended Debian installer template
+- `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/first-boot.service` — optional first-boot automation unit
+- `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/config.env` — site-specific VLAN and addressing configuration
+- `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/scripts/build-usb-image.sh` — ISO customization helper
+
+### What the unattended installer does
+
+- installs Debian 12 with standard utilities and OpenSSH server
+- creates a local administrative user defined at image build time
+- copies `setup-host.sh`, `config.env`, and `first-boot.service` onto the target system
+- enables the first-boot service so host configuration can be automated later if desired
+
+### Configure first-boot behavior
+
+Edit `/home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor/preseed/config.env` before building the USB image.
+
+- set `AUTO_RUN=0` to install only the OS and run the host bootstrap manually later
+- set `AUTO_RUN=1` to run the host bootstrap automatically on the first boot
+- adjust `INTERFACE`, `ADMIN_VLAN`, `ADMIN_CIDR`, `ADMIN_GATEWAY`, `ADMIN_DNS`, and `CONTAINER_VLANS` for the target environment
+
+### Build the customized installer image
+
+1. Download a Debian 12 netinstall ISO.
+2. Generate a password hash:
+
+   ```bash
+   openssl passwd -6
+   ```
+
+3. Build the custom ISO:
+
+   ```bash
+   cd /home/runner/work/crazy-vlan-accessor/crazy-vlan-accessor
+   ./scripts/build-usb-image.sh \
+     --source-iso /path/to/debian-12-netinst.iso \
+     --output-iso /tmp/crazy-vlan-accessor-installer.iso \
+     --admin-user vlanadmin \
+     --admin-password-hash '$6$example$replace-this-with-a-real-hash'
+   ```
+
+4. Write the ISO to a USB stick:
+
+   ```bash
+   sudo dd if=/tmp/crazy-vlan-accessor-installer.iso of=/dev/sdX bs=4M status=progress oflag=sync
+   ```
+
+### Resulting install flow
+
+- boot the USB installer image
+- let Debian install unattended using the embedded preseed
+- reboot into the installed system
+- if `AUTO_RUN=1`, the first-boot service runs `setup-host.sh` and creates Docker VLAN networks
+- if `AUTO_RUN=0`, log in and run `/usr/local/lib/crazy-vlan-accessor/setup-host.sh` manually with the desired parameters
 
 ## Running containers
 
